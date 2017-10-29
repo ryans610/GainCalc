@@ -1,78 +1,188 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
-	<title>Gini&amp;Gain</title>
-	<style>
-		form{
-			border: 1px dot red;
-		}
-	</style>
+    <meta charset="UTF-8">
+    <title>Gini&amp;Gain</title>
+    <style>
+        form{
+            margin: 5px;
+            padding: 5px;
+            border: 1px dotted red;
+        }
+    </style>
 </head>
 <body>
-	<form action="#" id="form1">
-		<h3>Gini</h3>
-		<label for="a">C1</label>
-		<input type="number" id="a" min="0" step="1">
-		<br>
-		<label for="b">C2</label>
-		<input type="number" id="b" min="0" step="1">
-		<br>
-		<button id="gini" type="submit">Gini</button>
-		<br>
-		<span id="result1"></span>
-	</form>
-	<form action="#" id="form2">
-		<h3>Gain</h3>
-		<table>
-			<tr>
-				<td></td>
-				<td>N1</td>
-				<td>N2</td>
-			</tr>
-			<tr>
-				<td>C1</td>
-				<td><input type="number" id="a1" min="0" step="1"></td>
-				<td><input type="number" id="b1" min="0" step="1"></td>
-			</tr>
-			<tr>
-				<td>C2</td>
-				<td><input type="number" id="a2" min="0" step="1"></td>
-				<td><input type="number" id="b2" min="0" step="1"></td>
-			</tr>
-		</table>
-		<button id="gain" type="submit">Gain</button>
-		<div id="result2"></div>
-	</form>
-	<script>
-		function gini(a,b){
-			a=parseInt(a);
-			b=parseInt(b);
-			var sum=a+b;
-			return 1-Math.pow(a/sum,2)-Math.pow(b/sum,2);
-		}
-		function gain(a1,a2,b1,b2){
-			a1=parseInt(a1);
-			a2=parseInt(a2);
-			b1=parseInt(b1);
-			b2=parseInt(b2);
-			var sum=a1+a2+b1+b2;
-			return gini(a1+b1,a2+b2)-gini(a1,a2)*(a1+a2)/sum-gini(b1,b2)*(b1+b2)/sum;
-		}
-		document.getElementById("gini").addEventListener("click",function(e){
-			e.preventDefault();
-			document.getElementById("result1").innerHTML=gini(
-				document.getElementById("a").value,
-				document.getElementById("b").value);
-		});
-		document.getElementById("gain").addEventListener("click",function(e){
-			e.preventDefault();
-			document.getElementById("result2").innerHTML=gain(
-				document.getElementById("a1").value,
-				document.getElementById("a2").value,
-				document.getElementById("b1").value,
-				document.getElementById("b2").value);
-		});
-	</script>
+    <form action="#" id="form1">
+        <h3>Gini</h3>
+        <label for="a">C1</label>
+        <input type="number" id="a" min="0" step="1">
+        <br>
+        <label for="b">C2</label>
+        <input type="number" id="b" min="0" step="1">
+        <br>
+        <button id="gini" type="submit">Gini</button>
+        <br>
+        <div id="result1"></div>
+    </form>
+    <form action="#" id="form2">
+        <h3>Gain</h3>
+        <table>
+            <tr>
+                <td></td>
+                <td>N1</td>
+                <td>N2</td>
+            </tr>
+            <tr>
+                <td>C1</td>
+                <td><input type="number" id="a1" min="0" step="1"></td>
+                <td><input type="number" id="b1" min="0" step="1"></td>
+            </tr>
+            <tr>
+                <td>C2</td>
+                <td><input type="number" id="a2" min="0" step="1"></td>
+                <td><input type="number" id="b2" min="0" step="1"></td>
+            </tr>
+        </table>
+        <button id="gain" type="submit">Gain</button>
+        <div id="result2"></div>
+    </form>
+    <form action="#" id="form3">
+        <h3>Gain Ratio</h3>
+        <table>
+            <tr>
+                <td></td>
+                <td>N1</td>
+                <td>N2</td>
+                <td>N3</td>
+            </tr>
+            <tr>
+                <td>C1</td>
+                <td><input type="number" id="gr-1-1" min="0" step="1"></td>
+                <td><input type="number" id="gr-2-1" min="0" step="1"></td>
+                <td><input type="number" id="gr-3-1" min="0" step="1"></td>
+            </tr>
+            <tr>
+                <td>C2</td>
+                <td><input type="number" id="gr-1-2" min="0" step="1"></td>
+                <td><input type="number" id="gr-2-2" min="0" step="1"></td>
+                <td><input type="number" id="gr-3-2" min="0" step="1"></td>
+            </tr>
+        </table>
+        <button id="gain-ratio-2" type="submit">Gain Ratio(2)</button>
+        <button id="gain-ratio-3" type="submit">Gain Ratio(3)</button>
+        <div id="result3"></div>
+    </form>
+    <script>
+        function gini(a,b){
+            a=parseInt(a);
+            b=parseInt(b);
+            var sum=a+b;
+            return 1-Math.pow(a/sum,2)-Math.pow(b/sum,2);
+        }
+        function gain(a1,a2,b1,b2){
+            a1=parseInt(a1);
+            a2=parseInt(a2);
+            b1=parseInt(b1);
+            b2=parseInt(b2);
+            var sum=a1+a2+b1+b2;
+            return gini(a1+b1,a2+b2)-gini(a1,a2)*(a1+a2)/sum-gini(b1,b2)*(b1+b2)/sum;
+        }
+        function entropy(a,b){
+            a=parseInt(a);
+            b=parseInt(b);
+            var sum=a+b;
+            var pa=a/sum;
+            var pb=b/sum;
+            return (pa<=0?0:-pa*Math.log2(pa))+(pb<=0?0:-pb*Math.log2(pb));
+        }
+        function gainSplit(arr1,arr2){
+            var i;
+            var sum1=0,sum2=0;
+            for(i in arr1){
+                arr1[i]=parseInt(arr1[i]);
+                sum1+=arr1[i];
+            }
+            for(i in arr2){
+                arr2[i]=parseInt(arr2[i]);
+                sum2+=arr2[i];
+            }
+            var sum=sum1+sum2;
+            var result=entropy(sum1,sum2);
+            for(i in arr1){
+                result-=entropy(arr1[i],arr2[i])*(arr1[i]+arr2[i])/sum;
+            }
+            return result;
+        }
+        function splitInfo(arr){
+            var i;
+            var sum=0;
+            for(i in arr){
+                arr[i]=parseInt(arr[i]);
+                sum+=arr[i];
+            }
+            var result=0;
+            for(i in arr){
+                var p=arr[i]/sum;
+                result-=p=0?0:Math.log2(p)*p;
+            }
+            return result;
+        }
+        function gainRatio(arr1,arr2){
+            var i;
+            for(i in arr1){
+                arr1[i]=parseInt(arr1[i]);
+                arr2[i]=parseInt(arr2[i]);
+            }
+            var arr=[];
+            for(i in arr1){
+                arr[i]=arr1[i]+arr2[i];
+            }
+            return gainSplit(arr1,arr2)/splitInfo(arr);
+        }
+        document.getElementById("gini").addEventListener("click",function(e){
+            e.preventDefault();
+            document.getElementById("result1").innerHTML=gini(
+                document.getElementById("a").value,
+                document.getElementById("b").value);
+        });
+        document.getElementById("gain").addEventListener("click",function(e){
+            e.preventDefault();
+            document.getElementById("result2").innerHTML=gain(
+                document.getElementById("a1").value,
+                document.getElementById("a2").value,
+                document.getElementById("b1").value,
+                document.getElementById("b2").value);
+        });
+        document.getElementById("gain-ratio-2").addEventListener("click",function(e){
+            e.preventDefault();
+            var arr1=
+            [
+                document.getElementById("gr-1-1").value,
+                document.getElementById("gr-2-1").value,
+            ];
+            var arr2=
+            [
+                document.getElementById("gr-1-2").value,
+                document.getElementById("gr-2-2").value,
+            ];
+            document.getElementById("result3").innerHTML=gainRatio(arr1,arr2);
+        });
+        document.getElementById("gain-ratio-3").addEventListener("click",function(e){
+            e.preventDefault();
+            var arr1=
+            [
+                document.getElementById("gr-1-1").value,
+                document.getElementById("gr-2-1").value,
+                document.getElementById("gr-3-1").value,
+            ];
+            var arr2=
+            [
+                document.getElementById("gr-1-2").value,
+                document.getElementById("gr-2-2").value,
+                document.getElementById("gr-3-2").value,
+            ];
+            document.getElementById("result3").innerHTML=gainRatio(arr1,arr2);
+        });
+    </script>
 </body>
 </html>
